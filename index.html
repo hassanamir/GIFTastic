@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <meta charset="utf-8">
+  <title>Favorite Artist</title>
+  <style type="text/css">
+    body{
+        background: lightgrey;
+    }
+    h1 {
+        text-align:left
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+      <br>
+    <h1>Artist Search</h1>
+
+    <div id="movies-view"></div>
+
+    <div id="buttons-view"></div>
+    <form id="Artist-form">
+        <br>
+      <label for="Artist-input">Add a Artist</label>
+      <input type="text" id="Artist-input">
+      <br>
+
+    </form>
+
+    <div id="Artist"> 
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+          
+
+      var Artist =["Drake", "Post Malone", "Travis Scott", "Aretha Flanklin", "khalid", "Maroon 5", "Imagine Dragons", "Shawn Mendes", "Bruno Mars", "Thomas Rhett"];
+    
+        
+      function displayArtistInfo() {
+          $("#Artist").append("<h5>New Artist</h5>");
+
+        var Artist = $(this).attr("data-name");
+        var queryURL= "http://api.giphy.com/v1/gifs/search?q=" + Artist+ "&api_key=b8NEgghlhXhkr38FtEDDMHv2Juc3fPUG&limit=10";
+        // console.log(movie)
+
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+        console.log(response)
+          var ArtistDiv = $("#Artist");
+
+          var rating = response.Rated;
+
+          var pOne = $("<p>").text("Rating: " + rating);
+
+          ArtistDiv.append(pOne);
+
+          var released = response.Released;
+
+          var pTwo = $("<p>").text("Released: " + released);
+
+          ArtistDiv.append(pTwo);
+
+          var plot = response.Plot;
+
+          var pThree = $("<p>").text("Plot: " + plot);
+
+          ArtistDiv.append(pThree);
+
+          var imgURL = response.Poster;
+
+          var image = $("<img>").attr("src", imgURL);
+
+          ArtistDiv.append(image);
+
+          $("#Artist-view").prepend(ArtistDiv);
+        });
+
+      }
+
+      function renderButtons() {
+
+        $("#buttons-view").empty();
+
+        for (var i = 0; i < Artist.length; i++) {
+
+          var a = $("<button>");
+          a.addClass("Artist-btn");
+          a.attr("data-name", Artist[i]);
+          a.text(Artist[i]);
+          $("#buttons-view").append(a);
+        }
+      }
+
+      $("#add-Artist").on("click", function(event) {
+        event.preventDefault();
+        var test = $("#Artist-input").val().trim();
+
+        Artist.push(test);
+        renderButtons();
+      });
+
+      $('body').on("click",".Artist-btn", function(event) {
+          console.log("click")
+          displayArtistInfo()
+
+      });    
+          
+
+      renderButtons();
+    </script>
+  </div>
+</body>
+
+</html>

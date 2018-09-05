@@ -53,8 +53,10 @@
         $.ajax({
           url: queryURL,
           method: "GET"
-        }).then(function(response) {
+        }).done(function(response) {
         console.log(response)
+        console.log(jQuery);
+        $("data").text(response.slug);
           var ArtistDiv = $("#Artist");
 
           var rating = response.Rated;
